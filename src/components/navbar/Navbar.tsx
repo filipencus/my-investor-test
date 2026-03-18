@@ -24,7 +24,7 @@ export default function Navbar() {
             color="inherit"
             sx={{ "&.active": { background: "#338eea" } }}
           >
-            Funds
+            Fondos
           </Button>
           <Button
             component={NavLink}
@@ -32,7 +32,7 @@ export default function Navbar() {
             color="inherit"
             sx={{ "&.active": { background: "#338eea" } }}
           >
-            Portfolio
+            Cartera
           </Button>
         </Toolbar>
       </AppBar>

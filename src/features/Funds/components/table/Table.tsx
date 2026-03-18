@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import LoginIcon from "@mui/icons-material/Login";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import type { FundTableProps, FundTableRow } from "../../../../models/funds.model";
 import "./Table.css";
 import {
   Button,
@@ -19,10 +20,7 @@ import {
   TableSortLabel,
 } from "@mui/material";
 
-// id, nombre, tipo, div, categoria, valor liquidado,
-// id, name, "fondos de inversion" ,value.currency, category, value.amount
-
-export default function GenericTable({ data }: { data: any }) {
+export default function GenericTable({ data, onBuyAction, onDetailsAction }: FundTableProps) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [order, setOrder] = useState<"asc" | "desc">("asc");
@@ -30,27 +28,21 @@ export default function GenericTable({ data }: { data: any }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedRow, setSelectedRow] = useState<any>(null);
 
-  console.log("Data recibida en GenericTable:", data);
-
   const rows = useMemo(() => {
-    if (!data || data.length === 0) return [];
-    return data?.data?.map((row: any) => ({
+    if (!data || data.data.length === 0) return [];
+    return data.data.map((row: any) => ({
       id: row.id,
       name: row.name,
-      type: "Fondos de inversión", // Asumo que el tipo es fijo para este ejemplo
+      type: "Fondos de inversión", // Asumo que el tipo es fijo para el ejemplo
       currency: row.value.currency,
       category: row.category,
       amount: row.value.amount,
     }));
   }, [data]);
-  console.log("Data:", rows);
 
-  const handleChangePage = (event: unknown, newPage: number) =>
-    setPage(newPage);
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+  const handleChangePage = (e: unknown, newPage: number) => setPage(newPage);
+  const handleChangeRowsPerPage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(e.target.value, 10));
     setPage(0);
   };
 
@@ -66,14 +58,25 @@ export default function GenericTable({ data }: { data: any }) {
     setOrderBy(property);
   };
 
-  const handleOpenMenu = (event: React.MouseEvent<HTMLElement>, row: any) => {
+  const handleCloseMenu = () => setAnchorEl(null);
+  const handleOpenMenu = (event: React.MouseEvent<HTMLElement>, row: FundTableRow) => {
     setAnchorEl(event.currentTarget);
     setSelectedRow(row);
   };
-  const handleCloseMenu = () => setAnchorEl(null);
+
+  const onClickBuyAction = (row: FundTableRow) => {
+    const fundData = data?.data.find((r) => r.id === row.id);
+    handleCloseMenu();
+    onBuyAction(fundData);
+  };
+
+  const onClickDetailsAction = (row: FundTableRow) => {
+    handleCloseMenu();
+    onDetailsAction(row.id);
+  };
 
   return (
-    <Paper sx={{ width: "100%", overflow: "hidden" }}>
+    <Paper>
       <TableContainer>
         <Table stickyHeader>
           <TableHead>
@@ -82,8 +85,7 @@ export default function GenericTable({ data }: { data: any }) {
                 <TableSortLabel
                   active={orderBy === "name"}
                   direction={orderBy === "name" ? order : "asc"}
-                  onClick={() => handleRequestSort("name")}
-                >
+                  onClick={() => handleRequestSort("name")}>
                   Nombre
                 </TableSortLabel>
               </TableCell>
@@ -92,8 +94,7 @@ export default function GenericTable({ data }: { data: any }) {
                 <TableSortLabel
                   active={orderBy === "currency"}
                   direction={orderBy === "currency" ? order : "asc"}
-                  onClick={() => handleRequestSort("currency")}
-                >
+                  onClick={() => handleRequestSort("currency")}>
                   Div
                 </TableSortLabel>
               </TableCell>
@@ -101,8 +102,7 @@ export default function GenericTable({ data }: { data: any }) {
                 <TableSortLabel
                   active={orderBy === "category"}
                   direction={orderBy === "category" ? order : "asc"}
-                  onClick={() => handleRequestSort("category")}
-                >
+                  onClick={() => handleRequestSort("category")}>
                   Categoria
                 </TableSortLabel>
               </TableCell>
@@ -110,8 +110,7 @@ export default function GenericTable({ data }: { data: any }) {
                 <TableSortLabel
                   active={orderBy === "amount"}
                   direction={orderBy === "amount" ? order : "asc"}
-                  onClick={() => handleRequestSort("amount")}
-                >
+                  onClick={() => handleRequestSort("amount")}>
                   Liquidado
                 </TableSortLabel>
               </TableCell>
@@ -119,22 +118,22 @@ export default function GenericTable({ data }: { data: any }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {sortedRows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => (
-                <TableRow key={row.id} hover>
-                  <TableCell>{row.name}</TableCell>
-                  <TableCell>{row.type}</TableCell>
-                  <TableCell>{row.currency}</TableCell>
-                  <TableCell>{row.category}</TableCell>
-                  <TableCell align="right">${row.amount}</TableCell>
-                  <TableCell align="center">
-                    <IconButton onClick={(e) => handleOpenMenu(e, row)}>
-                      <MoreVertIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+            {sortedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+              <TableRow key={row.id} hover>
+                <TableCell onClick={() => onClickDetailsAction(row)}>
+                  <span className="fund-link">{row.name}</span>
+                </TableCell>
+                <TableCell>{row.type}</TableCell>
+                <TableCell>{row.currency}</TableCell>
+                <TableCell>{row.category}</TableCell>
+                <TableCell align="right">${row.amount}</TableCell>
+                <TableCell align="center">
+                  <IconButton onClick={(e) => handleOpenMenu(e, row)}>
+                    <MoreVertIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -149,27 +148,13 @@ export default function GenericTable({ data }: { data: any }) {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
 
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleCloseMenu}
-      >
-        <MenuItem
-          onClick={() => {
-            console.log("Edit", selectedRow);
-            handleCloseMenu();
-          }}
-        >
+      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseMenu}>
+        <MenuItem onClick={() => onClickBuyAction(selectedRow)}>
           <Button variant="text" startIcon={<LoginIcon />}>
             Comprar
           </Button>
         </MenuItem>
-        <MenuItem
-          onClick={() => {
-            console.log("Details", selectedRow);
-            handleCloseMenu();
-          }}
-        >
+        <MenuItem onClick={() => onClickDetailsAction(selectedRow)}>
           <Button variant="text" startIcon={<RemoveRedEyeIcon />}>
             Ver Detalles
           </Button>

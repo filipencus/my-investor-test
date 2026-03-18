@@ -1,0 +1,8 @@
+.fund-link {
+  color: #007bff;
+}
+
+.fund-link:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
