@@ -1,0 +1,44 @@
+.portfolio-fund-item span {
+  display: flex !important;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.fund-name {
+  margin-left: 2px;
+  font-weight: bold;
+}
+
+.fund-value {
+  font-weight: bold;
+  text-align: right;
+}
+
+.fund-purchased {
+  font-size: 0.9em;
+  color: #555;
+}
+
+.portfolio-fund-item {
+  border: 1px solid #2476d22e;
+}
+
+.fund-profitability {
+  font-size: 0.9em;
+  color: green;
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+@media screen and (max-width: 500px) {
+  .portfolio-fund-item span {
+    width: 100% !important;
+    max-width: none !important;
+    text-align: center;
+    flex-direction: column;
+  }
+  .portfolio-fund-item .graph {
+    display: none;
+  }
+}

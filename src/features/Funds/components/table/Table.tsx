@@ -33,7 +33,7 @@ export default function GenericTable({ data, onBuyAction, onDetailsAction }: Fun
     return data.data.map((row: any) => ({
       id: row.id,
       name: row.name,
-      type: "Fondos de inversión", // Asumo que el tipo es fijo para el ejemplo
+      type: "Fondos de inversión", // TODO mirar de dónde sacar esto
       currency: row.value.currency,
       category: row.category,
       amount: row.value.amount,
