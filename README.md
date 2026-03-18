@@ -43,12 +43,18 @@ La verdad que me gustaria darle otra vuelta ya que ahora al final he entendido m
  -- Algunos componentes cross como generic-dialog deberian de estar en la carpeta común. <br/>
  -- En el dialogo he metido un componente input con la divisa pero no formatea realmente pero si valida.<br/>
  -- La seccion optional de Ordenes, le ha hecho usando localStorage, pero estaria bien sincronizarlo con backend (no he visto el endpoint)<br/>
- -- He intentado meter los test unitarios pero me fallaba continuamente vitest, no he llegado nisiquiera a pasar un test simple y lo deje (te explico màs abajo).
+ -- He intentado meter los test unitarios pero ~~me fallaba continuamente vitest~~, no he llegado nisiquiera a pasar un test simple y lo deje (te explico màs abajo).
 
 Bueno, la verdad que la prueba se me ha alargado mas de las 3 horas que tenia pensado inicialmente, quizas como 4 - 5 horas diria.
 por eso ya no he seguido con los tests porque entiendo que me he pasado del tiempo establecido. Una pena porque casi lo tenia.
-Se podria habe hecho una implementación mejor pero para eso necesito tiempo, corriendo algunas cosas tontas se me habràn pasado, seguro. 
+Se podria haber hecho una implementación mejor pero para eso necesito tiempo, corriendo algunas cosas tontas se me habràn pasado, seguro. 
 He desarrollado como loco, porque aunque parezca mucho, luego 3 horas se te hacen corto... en fin <br/>
  
 Espero que te guste, <br/>
 Un saludo Alex!
+
+
+<br/> 
+--------<br/>
+UPDATE: He conseguido arreglar el entorno con vitest y parece que ahora funciona. 
+Como ya es tarde solo he creado un test: fund-form.test.tsx
