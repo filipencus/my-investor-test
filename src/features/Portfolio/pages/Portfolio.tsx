@@ -181,6 +181,7 @@ export default function PortfolioPage() {
       </CustomTabPanel>
 
       {/* Menu acciones */}
+      {/* TODO move to a separate component */}
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseMenu}>
         <MenuItem onClick={() => onClickBuyAction(selectedRow)}>
           <Button variant="text" startIcon={<LoginIcon />}>

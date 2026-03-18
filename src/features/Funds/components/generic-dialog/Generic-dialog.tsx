@@ -12,12 +12,12 @@ export function GenericDialog({ open, title, onClose, children }: ModalProps) {
   }, [open]);
 
   return (
-    <dialog ref={dialogRef} className="generic-dialog">
+    <dialog ref={dialogRef} className="generic-dialog" role="dialog" aria-modal="true">
       <header className="header-dialog">
-        <h2>{title}</h2>
+        <h2 id="generic-dialog-title">{title}</h2>
 
-        <IconButton onClick={onClose} aria-label="close">
-          <CloseIcon />
+        <IconButton onClick={onClose} aria-label={`Close ${title} dialog`} autoFocus>
+          <CloseIcon aria-hidden="true" />
         </IconButton>
       </header>
       <div>{children}</div>

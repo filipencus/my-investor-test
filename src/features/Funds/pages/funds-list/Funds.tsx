@@ -26,8 +26,25 @@ export default function FundsPage() {
     navigate(`/funds/${fundId}`);
   };
 
-  if (isLoading) return <div>Cargando...</div>;
-  if (isError) return <div>Error: {error.message}</div>;
+  const handleCloseDialog = () => {
+    setFundDetails(null);
+  };
+
+  if (isLoading) {
+    return (
+      <div role="status" aria-live="polite" aria-label="Cargando fondos...">
+        Cargando...
+      </div>
+    );
+  }
+  if (isError) {
+    return (
+      <div role="alert" aria-live="assertive">
+        <p>Error al cargar los fondos:</p>
+        <p>{error?.message}</p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -38,8 +55,17 @@ export default function FundsPage() {
         onDetailsAction={handleDetailsAction}
       />
       {fundDetails && (
-        <GenericDialog open={true} title="Compra" onClose={() => setFundDetails(null)}>
-          <GenericFundForm fundDetails={fundDetails} config={{ title: "Comprar fondo", action: "BUY" }} shouldClose={() => setFundDetails(null)} />
+        <GenericDialog
+          open={true}
+          title="Compra fondo"
+          aria-labelledby="buy-fund-dialog-title"
+          onClose={handleCloseDialog}
+        >
+          <GenericFundForm
+            fundDetails={fundDetails}
+            config={{ title: "Comprar fondo", action: "BUY" }}
+            shouldClose={handleCloseDialog}
+          />
         </GenericDialog>
       )}
     </>

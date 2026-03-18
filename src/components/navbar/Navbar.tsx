@@ -5,19 +5,20 @@ import MenuIcon from "@mui/icons-material/Menu";
 export default function Navbar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="static" component="nav" aria-label="Primary navigation">
         <Toolbar>
           <IconButton
+            component={Link}
+            to="/home"
             size="large"
             edge="start"
             color="inherit"
-            aria-label="menu"
+            aria-label="Go to home page"
             sx={{ mr: 2 }}
           >
-            <Link to="/home" style={{ color: "inherit", textDecoration: "none" }}>
-              <MenuIcon />
-            </Link>
+            <MenuIcon />
           </IconButton>
+
           <Button
             component={NavLink}
             to="/funds"
@@ -26,6 +27,7 @@ export default function Navbar() {
           >
             Fondos
           </Button>
+
           <Button
             component={NavLink}
             to="/portfolio"

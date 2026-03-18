@@ -9,6 +9,10 @@ import type { PortfolioFund } from "../../../../models/portfolio.model";
 import { FundActionType } from "../../../../models/funds.model";
 import { useTransactionEvents } from "../../../../hooks/useOrdersHistory";
 
+type FundFormValues = {
+  amount: string;
+};
+
 export default function GenericFundForm({
   config,
   fundDetails,
@@ -47,9 +51,9 @@ export default function GenericFundForm({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<FundFormValues>();
 
-  const onSuccess = (amount: any) => {
+  const onSuccess = (amount: number) => {
     setSuccessMessage("Acción realizada con éxito");
     registerEvent({
       typeOfEvent: config.action,
@@ -60,24 +64,29 @@ export default function GenericFundForm({
       shouldClose();
     }, 1000);
   };
+
   const onError = (resp: any) => {
     setErrorMessage(resp?.error || "No se pudo completar la acción");
   };
 
-  const onSubmit = (data: any) => {
-    const amount = parseInt(data.amount);
+  const onSubmit = (data: FundFormValues) => {
+    setErrorMessage("");
+    const amount = Number(data.amount);
+
     if (config.action === FundActionType.BUY) {
       purchaseFund(
         { fundId: fundDetails.id, amount },
         { onSuccess: () => onSuccess(amount), onError },
       );
     }
+
     if (config.action === FundActionType.SELL) {
       sellFund({ fundId: fundDetails.id, amount }, { onSuccess: () => onSuccess(amount), onError });
     }
+
     if (config.action === FundActionType.TRANSFER) {
       if (!selectedTargetFundId) {
-        alert("Por favor selecciona un fondo destino");
+        setErrorMessage("Por favor selecciona un fondo destino");
         return;
       }
       transferFund(
@@ -108,27 +117,43 @@ export default function GenericFundForm({
   };
 
   if (isPending) {
-    return <div>Procesando acción...</div>;
+    return (
+      <div role="status" aria-live="polite">
+        Procesando acción...
+      </div>
+    );
   }
 
   if (successMessage) {
-    return <div style={{ color: "green" }}>{successMessage}</div>;
+    return (
+      <div role="status" aria-live="polite" style={{ color: "green" }}>
+        {successMessage}
+      </div>
+    );
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      Fondo: {fundDetails.name} <br />
+    <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <p>
+        Fondo: <strong>{fundDetails.name}</strong>
+      </p>
+
       {fundDetails.value && (
-        <div>
+        <p>
           Valor actual: {displayValue} {fundDetails.value.currency}
-        </div>
+        </p>
       )}
-      <br />
-      <br />
+
       {config.action === FundActionType.TRANSFER && (
         <FormControl fullWidth variant="standard">
           <label htmlFor="targetFund">Fondo destino</label>
-          <select onChange={(e) => setSelectedTargetFundId(e.target.value)} required>
+          <select
+            id="targetFund"
+            name="targetFund"
+            value={selectedTargetFundId}
+            onChange={(e) => setSelectedTargetFundId(e.target.value)}
+            required
+            aria-required="true">
             <option value="">Selecciona un fondo</option>
             {myFundsList
               ?.filter((fund: PortfolioFund) => fund.id !== fundDetails.id)
@@ -141,24 +166,44 @@ export default function GenericFundForm({
           <br />
         </FormControl>
       )}
+
       <FormControl fullWidth variant="standard">
         <label htmlFor="amount">Importe</label>
         <Input
+          id="amount"
+          type="number"
+          inputProps={{ min: 0, max: 10000, step: "0.01", inputMode: "decimal" }}
           endAdornment={<InputAdornment position="end">€</InputAdornment>}
-          type="text"
           placeholder="0,00"
+          aria-invalid={!!errors.amount}
+          aria-describedby={errors.amount ? "amount-error" : undefined}
           {...register("amount", amountValidation)}
         />
       </FormControl>
+
+      <br />
+      <br />
+
       {errors.amount && (
-        <span style={{ color: "red", fontSize: "12px" }}>
+        <span id="amount-error" role="alert" style={{ color: "red", fontSize: "12px" }}>
           {typeof errors.amount.message === "string" ? errors.amount.message : ""}
         </span>
       )}
+
+      {errorMessage && (
+        <div role="alert" aria-live="assertive" style={{ color: "red" }}>
+          {errorMessage}
+        </div>
+      )}
+
+      {isError && (
+        <div role="alert" aria-live="assertive" style={{ color: "red" }}>
+          {error?.message}
+        </div>
+      )}
+
       <br />
-      {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}
-      {isError && <div style={{ color: "red" }}>{error?.message}</div>}
-      <br />
+
       <div style={{ display: "flex", justifyContent: "center", marginTop: "16px" }}>
         <Button type="submit" variant="contained" disabled={isPending}>
           Continuar

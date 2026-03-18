@@ -4,6 +4,7 @@ import { Link as RouterLink } from "react-router-dom";
 export default function Home() {
   return (
     <Box
+      component="main"
       sx={{
         minHeight: "100vh",
         display: "flex",
@@ -24,11 +25,21 @@ export default function Home() {
         Para empezar a ver el challenge pulsa en este botón
       </Typography>
 
-      <Button variant="contained" size="large" component={RouterLink} to="/funds">
+      <Button
+        variant="contained"
+        size="large"
+        component={RouterLink}
+        to="/funds"
+        aria-label="Ver fondos disponibles para invertir"
+      >
         Ver fondos disponibles
       </Button>
 
-      <Typography component="div" sx={{ fontSize: "5rem", mt: 2 }}>
+      <Typography
+        component="div"
+        sx={{ fontSize: "5rem", mt: 2 }}
+        aria-hidden="true"
+      >
         🚀
       </Typography>
     </Box>

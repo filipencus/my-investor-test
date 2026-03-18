@@ -5,8 +5,10 @@ import styles from "./Layout.module.css";
 export default function RootLayout() {
   return (
     <div>
-      <Navbar />
-      <main className={styles.padding}>
+      <header>
+        <Navbar />
+      </header>
+      <main id="main-content" className={styles.padding}>
         <Outlet />
       </main>
     </div>
