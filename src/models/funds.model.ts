@@ -61,3 +61,9 @@ export interface FormConfigProps {
   action: FundAction;
   validation?: any;
 }
+
+export interface ModalFundProps {
+  config: FormConfigProps;
+  fundDetails?: FundDetails;
+  handleClose: () => void;
+}

@@ -31,6 +31,11 @@
   font-weight: bold;
 }
 
+.loading {
+  text-align: center;
+  margin-top: 20px;
+}
+
 @media screen and (max-width: 500px) {
   .portfolio-fund-item span {
     width: 100% !important;

@@ -6,6 +6,13 @@
   width: 200px;
   margin-top: 20px !important;
 }
+
+.not-found,
+.loading {
+  text-align: center;
+  margin-top: 20px;
+}
+
 @media screen and (max-width: 500px) {
   .back-button {
     position: fixed;

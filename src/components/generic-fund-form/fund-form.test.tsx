@@ -1,10 +1,10 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, it, expect, vi, afterEach } from "vitest";
-import { renderWithQueryClient } from "../../../../test/helpers";
-import { mockFundDetails } from "../../../../models/tests.model";
 import GenericFundForm from "./fund-form";
-import { FundActionType } from "../../../../models/funds.model";
+import { renderWithQueryClient } from "../../test/helpers";
+import { mockFundDetails } from "../../models/tests.model";
+import { FundActionType } from "../../models/funds.model";
 
 const {
   mockPurchaseMutate,
@@ -62,20 +62,20 @@ function createMutationHookMock(mutate: ReturnType<typeof vi.fn>, state: Mutatio
   };
 }
 
-vi.mock("../../../../hooks/useFundPurchase", () =>
+vi.mock("../../hooks/useFundPurchase", () =>
   createMutationHookMock(mockPurchaseMutate, purchaseState),
 );
-vi.mock("../../../../hooks/useFundSell", () => createMutationHookMock(mockSellMutate, sellState));
-vi.mock("../../../../hooks/useFundTransfer", () =>
+vi.mock("../../hooks/useFundSell", () => createMutationHookMock(mockSellMutate, sellState));
+vi.mock("../../hooks/useFundTransfer", () =>
   createMutationHookMock(mockTransferMutate, transferState),
 );
-vi.mock("../../../../hooks/useOrdersHistory", () => ({
+vi.mock("../../hooks/useOrdersHistory", () => ({
   useTransactionEvents: () => ({
     registerEvent: mockRegisterEvent,
     events: [],
   }),
 }));
-vi.mock("../../../../hooks/usePortfolioFunds", () => ({
+vi.mock("../../hooks/usePortfolioFunds", () => ({
   usePortfolioFunds: () => ({
     data: portfolioFundsState.data,
   }),
@@ -227,7 +227,7 @@ describe("GenericFundForm", () => {
 
   it("should show success message, register event and schedule modal close", async () => {
     const setTimeoutSpy = vi.spyOn(globalThis, "setTimeout");
-    mockPurchaseMutate.mockImplementation((_, options) => {
+    mockPurchaseMutate.mockImplementation((_, options: any) => {
       options.onSuccess();
     });
 
@@ -248,7 +248,7 @@ describe("GenericFundForm", () => {
   });
 
   it("should show custom error message when mutation fails", async () => {
-    mockPurchaseMutate.mockImplementation((_, options) => {
+    mockPurchaseMutate.mockImplementation((_, options: any) => {
       options.onError({ error: "Error de compra" });
     });
 

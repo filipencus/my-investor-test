@@ -6,8 +6,6 @@ import LoginIcon from "@mui/icons-material/Login";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ScreenRotationAltIcon from "@mui/icons-material/ScreenRotationAlt";
-import { GenericDialog } from "../../Funds/components/generic-dialog/Generic-dialog";
-import GenericFundForm from "../../Funds/components/fund-form/fund-form";
 import AutoGraphIcon from "@mui/icons-material/AutoGraph";
 import { useNavigate } from "react-router-dom";
 import { formatNumber } from "../../../utils/utils";
@@ -33,6 +31,7 @@ import {
   Tab,
   Tabs,
 } from "@mui/material";
+import { FundDialog } from "../../../components/fund-dialog/Fund-dialog";
 
 export default function PortfolioPage() {
   const navigate = useNavigate();
@@ -97,7 +96,7 @@ export default function PortfolioPage() {
 
   if (isLoading) {
     return (
-      <div className="portfolio-loading">
+      <div className="loading">
         <p>Cargando datos de la cartera...</p>
       </div>
     );
@@ -207,13 +206,11 @@ export default function PortfolioPage() {
 
       {/* Modals */}
       {fundDetails && (
-        <GenericDialog open={true} title={modalConfig?.title} onClose={() => setFundDetails(null)}>
-          <GenericFundForm
-            fundDetails={fundDetails}
-            config={modalConfig}
-            shouldClose={() => setFundDetails(null)}
-          />
-        </GenericDialog>
+        <FundDialog
+          config={modalConfig as FormConfigProps}
+          fundDetails={fundDetails as any}
+          handleClose={() => setFundDetails(null)}
+        />
       )}
     </div>
   );

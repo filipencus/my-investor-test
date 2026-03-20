@@ -1,11 +1,18 @@
-export default function formatCurrency(value: string): { formatted: string; numeric: number } {
-  const numeric = parseFloat(value.replace(/[^\d.]/g, "")) || 0;
-  const formatted = new Intl.NumberFormat("es-ES", {
-    style: "currency",
-    currency: "EUR",
-  }).format(numeric);
-  return { formatted, numeric };
-}
+import type { PortfolioFund, PortfolioMixedData } from "../models/portfolio.model";
+
+// Agrupamos por catergorias y combinamos en un objeto
+export const groupByCategory = (portfolioData: any, fundsData: any) => {
+  const categorizedData: Record<string, PortfolioMixedData[]> = {};
+  portfolioData?.forEach((rowData: PortfolioFund) => {
+    const fund = fundsData?.find((f: any) => String(f.id) === String(rowData.id));
+    const item = { ...fund, ...rowData } as PortfolioMixedData;
+    if (!categorizedData[item.category]) {
+      categorizedData[item.category] = [];
+    }
+    categorizedData[item.category].push(item);
+  });
+  return categorizedData;
+};
 
 const formatter = new Intl.NumberFormat("en-US", {
   minimumFractionDigits: 2,

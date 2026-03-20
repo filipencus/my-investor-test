@@ -4,8 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getFundsList } from "../../../../services/api-service";
 import { useState } from "react";
 import type { FundDetails } from "../../../../models/funds.model";
-import { GenericDialog } from "../../components/generic-dialog/Generic-dialog";
-import GenericFundForm from "../../components/fund-form/fund-form";
+import { FundDialog } from "../../../../components/fund-dialog/Fund-dialog";
 
 export default function FundsPage() {
   const [fundDetails, setFundDetails] = useState<FundDetails | null>(null);
@@ -32,7 +31,7 @@ export default function FundsPage() {
 
   if (isLoading) {
     return (
-      <div role="status" aria-live="polite" aria-label="Cargando fondos...">
+      <div className="loading" role="status" aria-live="polite" aria-label="Cargando fondos...">
         Cargando...
       </div>
     );
@@ -55,18 +54,11 @@ export default function FundsPage() {
         onDetailsAction={handleDetailsAction}
       />
       {fundDetails && (
-        <GenericDialog
-          open={true}
-          title="Compra fondo"
-          aria-labelledby="buy-fund-dialog-title"
-          onClose={handleCloseDialog}
-        >
-          <GenericFundForm
-            fundDetails={fundDetails}
-            config={{ title: "Comprar fondo", action: "BUY" }}
-            shouldClose={handleCloseDialog}
-          />
-        </GenericDialog>
+        <FundDialog
+          config={{ title: "Comprar fondo", action: "BUY" }}
+          fundDetails={fundDetails}
+          handleClose={handleCloseDialog}
+        />
       )}
     </>
   );

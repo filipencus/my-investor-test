@@ -1,13 +1,13 @@
 import { useForm } from "react-hook-form";
 import { Button, FormControl, Input, InputAdornment } from "@mui/material";
-import useFundPurchaseMutation from "../../../../hooks/useFundPurchase";
-import useFundSellMutation from "../../../../hooks/useFundSell";
-import useFundTransferMutation from "../../../../hooks/useFundTransfer";
+import useFundPurchaseMutation from "../../hooks/useFundPurchase";
+import useFundSellMutation from "../../hooks/useFundSell";
+import useFundTransferMutation from "../../hooks/useFundTransfer";
 import { useState } from "react";
-import { usePortfolioFunds } from "../../../../hooks/usePortfolioFunds";
-import type { PortfolioFund } from "../../../../models/portfolio.model";
-import { FundActionType } from "../../../../models/funds.model";
-import { useTransactionEvents } from "../../../../hooks/useOrdersHistory";
+import { usePortfolioFunds } from "../../hooks/usePortfolioFunds";
+import type { PortfolioFund } from "../../models/portfolio.model";
+import { FundActionType } from "../../models/funds.model";
+import { useTransactionEvents } from "../../hooks/useOrdersHistory";
 
 type FundFormValues = {
   amount: string;

@@ -15,7 +15,7 @@ export default function useFundTransferMutation() {
       return fundTransfer({ fromFundId, toFundId, amount });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['portfolio'] });
-    },
+      queryClient.invalidateQueries({ queryKey: ["portfolio"] });
+    }
   });
 }

@@ -1,11 +1,20 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getFundDetails } from "../../../../services/api-service";
-import { Card, CardContent, Typography, Divider, Grid, Chip, Button } from "@mui/material";
-import "./FundsDetails.css"
+import "./FundsDetails.css";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Divider,
+  Grid,
+  Chip,
+  Button,
+} from "@mui/material";
 
 export default function FundsDetailsPage() {
   const { fundId } = useParams();
+  const navigate = useNavigate();
   const {
     data: fund,
     isLoading,
@@ -14,25 +23,22 @@ export default function FundsDetailsPage() {
   } = useQuery({
     queryKey: ["fund-details", fundId],
     queryFn: () => getFundDetails({ fundId: fundId! }),
-    enabled: Boolean(fundId),
+    enabled: true,
   });
 
   const goBack = () => {
-    window.history.back();
+    navigate(-1);
   };
 
   return (
     <div>
-      {!fundId && <p>Missing fund id.</p>}
-      {isLoading && <p>Loading details...</p>}
+      {!fundId && <p>ID de fondo no encontrado.</p>}
+      {isLoading && <p className="loading">Cargando detalles...</p>}
       {isError && <p>Error: {error?.message}</p>}
-      {!fund && <p>No fund details found.</p>}
+      {!fund && <p className="not-found">No se encontraron detalles del fondo.</p>}
 
       {fund && (
         <>
-          <Button variant="contained" onClick={goBack} className="back-button">
-            Volver
-          </Button>
           <Card
             sx={{
               p: 3,
@@ -43,7 +49,8 @@ export default function FundsDetailsPage() {
               minHeight: "40vh",
               alignItems: "center",
               justifyContent: "center",
-            }}>
+            }}
+          >
             <CardContent>
               <Typography variant="h4" component="h1" gutterBottom>
                 {fund.name}
@@ -58,7 +65,7 @@ export default function FundsDetailsPage() {
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <Typography color="textSecondary" variant="body2">
-                    Symbol
+                    Simbolo
                   </Typography>
                   <Typography variant="body1" sx={{ fontWeight: "bold" }}>
                     {fund.symbol}
@@ -66,13 +73,13 @@ export default function FundsDetailsPage() {
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <Typography color="textSecondary" variant="body2">
-                    Category
+                    Categoria
                   </Typography>
                   <Chip label={fund.category} size="small" />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <Typography color="textSecondary" variant="body2">
-                    Value
+                    Valor
                   </Typography>
                   <Typography variant="h6" sx={{ color: "success.main" }}>
                     {fund.value.amount} {fund.value.currency}
@@ -81,6 +88,9 @@ export default function FundsDetailsPage() {
               </Grid>
             </CardContent>
           </Card>
+          <Button variant="contained" onClick={goBack} className="back-button">
+            Volver
+          </Button>
         </>
       )}
     </div>
